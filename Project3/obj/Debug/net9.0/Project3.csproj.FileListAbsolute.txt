@@ -1,0 +1,14 @@
+C:\Users\User\RiderProjects\Project3\Project3\bin\Debug\net9.0\Project3.exe
+C:\Users\User\RiderProjects\Project3\Project3\bin\Debug\net9.0\Project3.deps.json
+C:\Users\User\RiderProjects\Project3\Project3\bin\Debug\net9.0\Project3.runtimeconfig.json
+C:\Users\User\RiderProjects\Project3\Project3\bin\Debug\net9.0\Project3.dll
+C:\Users\User\RiderProjects\Project3\Project3\bin\Debug\net9.0\Project3.pdb
+C:\Users\User\RiderProjects\Project3\Project3\obj\Debug\net9.0\Project3.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\RiderProjects\Project3\Project3\obj\Debug\net9.0\Project3.AssemblyInfoInputs.cache
+C:\Users\User\RiderProjects\Project3\Project3\obj\Debug\net9.0\Project3.AssemblyInfo.cs
+C:\Users\User\RiderProjects\Project3\Project3\obj\Debug\net9.0\Project3.csproj.CoreCompileInputs.cache
+C:\Users\User\RiderProjects\Project3\Project3\obj\Debug\net9.0\Project3.dll
+C:\Users\User\RiderProjects\Project3\Project3\obj\Debug\net9.0\refint\Project3.dll
+C:\Users\User\RiderProjects\Project3\Project3\obj\Debug\net9.0\Project3.pdb
+C:\Users\User\RiderProjects\Project3\Project3\obj\Debug\net9.0\Project3.genruntimeconfig.cache
+C:\Users\User\RiderProjects\Project3\Project3\obj\Debug\net9.0\ref\Project3.dll
