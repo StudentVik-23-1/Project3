@@ -6,5 +6,9 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
+    <ItemGroup>
+    <ProjectReference Include="C:\Users\User\RiderProjects\Parser\ConsoleApp1\ConsoleApp1.csproj" />
+</ItemGroup>
+
 
 </Project>

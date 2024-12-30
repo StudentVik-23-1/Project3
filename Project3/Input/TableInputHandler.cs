@@ -1,12 +1,14 @@
 namespace Project3.Input;
 
 using Project3.Cells;
+using Project3.Parser;
 
 public class TableInputHandler
 {
     private readonly int _rows;
     private readonly int _columns;
     private readonly ICell[,] _cells;
+    private readonly FormulaParser _formulaParser;
 
     public TableInputHandler(int rows, int columns)
     {
@@ -23,6 +25,9 @@ public class TableInputHandler
                 _cells[row, col] = new Cell(coordinates);
             }
         }
+
+        // Створення об'єкта FormulaParser, передаємо клітинки для обробки
+        _formulaParser = new FormulaParser(_cells);
     }
 
     // Введення значень у таблицю
@@ -44,7 +49,14 @@ public class TableInputHandler
                 // Зчитуємо значення для клітинки
                 string value = ReadCellInput();
                 _cells[row, col].Value = value;
-                _cells[row, col].Evaluate(); // Обчислюємо значення, якщо це вираз
+
+                // Якщо клітинка має формулу, обчислюємо її значення
+                if (_cells[row, col].Type == CellType.Formula)
+                {
+                    string formula = _cells[row, col].Formula;
+                    double result = _formulaParser.ParseFormula(formula);
+                    _cells[row, col].Value = result.ToString();
+                }
 
                 cursorX += 12;
             }
@@ -101,9 +113,8 @@ public class TableInputHandler
             for (int col = 0; col < _columns; col++)
             {
                 ICell cell = _cells[row, col];
-                Console.WriteLine($"Address: {cell.Coordinates}, Value: {cell.Value}");
+                Console.WriteLine($"Address: {cell.Coordinates}, Value: {cell.Value}, Type: {cell.Type}");
             }
         }
     }
-
 }
