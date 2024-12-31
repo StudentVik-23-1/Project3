@@ -14,6 +14,6 @@ class Program
 
         inputHandler.InputTable();
 
-        inputHandler.DisplayTable();
+        inputHandler.DisplayTable();    
     }
 }

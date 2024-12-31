@@ -16,7 +16,6 @@ public class TableInputHandler
         _columns = columns;
         _cells = new ICell[rows, columns];
 
-        // Ініціалізація масиву клітинок
         for (int row = 0; row < rows; row++)
         {
             for (int col = 0; col < columns; col++)
@@ -26,11 +25,9 @@ public class TableInputHandler
             }
         }
 
-        // Створення об'єкта FormulaParser, передаємо клітинки для обробки
         _formulaParser = new FormulaParser(_cells);
     }
 
-    // Введення значень у таблицю
     public void InputTable()
     {
         Console.Clear();
@@ -45,17 +42,22 @@ public class TableInputHandler
             for (int col = 0; col < _columns; col++)
             {
                 Console.SetCursorPosition(cursorX, cursorY);
-
-                // Зчитуємо значення для клітинки
+                
                 string value = ReadCellInput();
                 _cells[row, col].Value = value;
-
-                // Якщо клітинка має формулу, обчислюємо її значення
+                
                 if (_cells[row, col].Type == CellType.Formula)
                 {
-                    string formula = _cells[row, col].Formula;
-                    double result = _formulaParser.ParseFormula(formula);
-                    _cells[row, col].Value = result.ToString();
+                    try
+                    {
+                        string formula = _cells[row, col].Formula;
+                        double result = _formulaParser.ParseFormula(formula);
+                        _cells[row, col].Value = result.ToString();
+                    }
+                    catch
+                    {
+                        _cells[row, col].Value = "Error";
+                    }
                 }
 
                 cursorX += 12;
@@ -65,7 +67,6 @@ public class TableInputHandler
         }
     }
 
-    // Зчитування вводу користувача
     private string ReadCellInput()
     {
         string input = string.Empty;
@@ -89,7 +90,6 @@ public class TableInputHandler
         return input;
     }
 
-    // Відображення таблиці
     public void DisplayTable()
     {
         Console.WriteLine("\nTable Output:");
@@ -104,7 +104,7 @@ public class TableInputHandler
         DisplayCellDetails();
     }
     
-    //  Testing Method
+    //  Testing Method ( Unnecessary )
     public void DisplayCellDetails()
     {
         Console.WriteLine("\nCell Details:");

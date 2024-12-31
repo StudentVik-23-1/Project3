@@ -20,14 +20,14 @@ public class Cell : ICell
     public Cell(string coordinates)
     {
         Coordinates = coordinates;
-        Type = CellType.Value; // За замовчуванням клітинка містить значення
+        Type = CellType.Value; 
     }
     private void UpdateCellType()
     {
         if (!string.IsNullOrEmpty(_value) && _value.StartsWith("="))
         {
             Type = CellType.Formula;
-            Formula = _value.Substring(1); // Зберігаємо формулу без знака "="
+            Formula = _value.Substring(1); 
         }
         else
         {
