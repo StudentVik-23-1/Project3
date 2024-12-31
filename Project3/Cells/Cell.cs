@@ -1,50 +1,51 @@
+using System.Globalization;
 using Project3.Parser;
 
 namespace Project3.Cells;
 
-public class Cell : ICell
+public sealed class Cell(string coordinates) : ICell
 {
-    public string Coordinates { get; private set; }
+    private const string FORMULA_PREFIX = "=";
+    private const int FORMULA_PREFIX_LENGTH = 1;
+
     private string _value;
+
+    public string Coordinates { get; private set; } = coordinates;
+
     public string Value
     {
-        get { return _value; }
+        get => _value;
         set
         {
             _value = value;
             UpdateCellType();
         }
-    }    public CellType Type { get; private set; }
-    public string Formula { get; set; }
-
-    public Cell(string coordinates)
-    {
-        Coordinates = coordinates;
-        Type = CellType.Value; 
     }
+
+    public CellType Type { get; private set; } = CellType.Value;
+
+    public string Formula { get; set; }     // TODO look into making { get; private set; }
+
+    public void Evaluate()
+    {
+        if (MathExpressionEvaluator.TryEvaluate(Value, out double result))
+        {
+            Value = result.ToString(CultureInfo.InvariantCulture);
+            Type = CellType.Value;
+        }
+    }
+
     private void UpdateCellType()
     {
-        if (!string.IsNullOrEmpty(_value) && _value.StartsWith("="))
+        if (!string.IsNullOrEmpty(_value) && _value.StartsWith(FORMULA_PREFIX))
         {
             Type = CellType.Formula;
-            Formula = _value.Substring(1); 
+            Formula = _value[FORMULA_PREFIX_LENGTH..];
         }
         else
         {
             Type = CellType.Value;
             Formula = null;
         }
-    }
-
-    public void Evaluate()
-    {
-        // if (Type == CellType.Formula)
-        // {
-            if (MathExpressionEvaluator.TryEvaluate(Value, out double result))
-            {
-                Value = result.ToString();
-                Type = CellType.Value; 
-            }
-        // }
     }
 }

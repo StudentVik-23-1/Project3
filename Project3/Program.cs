@@ -1,15 +1,16 @@
 ﻿using System;
 using Project3.Input;
+using Project3.Validators;
 
 class Program
 {
     static void Main(string[] args)
     {
-        Console.Write("Enter number of rows: ");
-        int rows = int.Parse(Console.ReadLine());
-        Console.Write("Enter number of columns: ");
-        int columns = int.Parse(Console.ReadLine());
-
+        TableSizeValidator sizeValidator = new TableSizeValidator();
+        
+        ushort rows = sizeValidator.GetValidRowInput();
+        ushort columns = sizeValidator.GetValidColumnInput();
+        
         TableInputHandler inputHandler = new TableInputHandler(rows, columns);
 
         inputHandler.InputTable();

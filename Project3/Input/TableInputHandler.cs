@@ -1,10 +1,26 @@
+using System.Globalization;
+
 namespace Project3.Input;
 
 using Project3.Cells;
 using Project3.Parser;
 
-public class TableInputHandler
+public sealed class TableInputHandler
 {
+    private const int CellDisplayWidth = 12;
+
+    private const int TableStartCursorY = 3;
+
+    private const string TableInputPrompt = "Please input values for a table of {0}x{1}";
+
+    private const string InputLengthWarning = "Please keep the input length under 12 symbols!";
+
+    private const string TableOutputHeading = "Table Output:";
+
+    private const string CellDetailsHeading = "Cell Details:";
+
+    private const string ErrorValue = "Error";
+
     private readonly int _rows;
     private readonly int _columns;
     private readonly ICell[,] _cells;
@@ -14,76 +30,94 @@ public class TableInputHandler
     {
         _rows = rows;
         _columns = columns;
-        _cells = new ICell[rows, columns];
+        _cells = new ICell[_rows, _columns];
 
-        for (int row = 0; row < rows; row++)
+        InitializeCells();
+        _formulaParser = new FormulaParser(_cells);
+    }
+
+    private void InitializeCells()
+    {
+        for (int row = 0; row < _rows; row++)
         {
-            for (int col = 0; col < columns; col++)
+            for (int col = 0; col < _columns; col++)
             {
                 string coordinates = CellAddresser.GetCellAddress(row, col);
                 _cells[row, col] = new Cell(coordinates);
             }
         }
-
-        _formulaParser = new FormulaParser(_cells);
     }
 
     public void InputTable()
     {
         Console.Clear();
-        Console.WriteLine($"Please input values for a table of {_rows}x{_columns}");
-        Console.WriteLine($"Please keep the input length under 12 symbols!");
+        Console.WriteLine(TableInputPrompt, _rows, _columns);
+        Console.WriteLine(InputLengthWarning);
 
         int cursorX = 0;
-        int cursorY = 3;
+        int cursorY = TableStartCursorY;
 
         for (int row = 0; row < _rows; row++)
         {
             for (int col = 0; col < _columns; col++)
             {
                 Console.SetCursorPosition(cursorX, cursorY);
-                
-                string value = ReadCellInput();
-                _cells[row, col].Value = value;
-                
-                if (_cells[row, col].Type == CellType.Formula)
-                {
-                    try
-                    {
-                        string formula = _cells[row, col].Formula;
-                        double result = _formulaParser.ParseFormula(formula);
-                        _cells[row, col].Value = result.ToString();
-                    }
-                    catch
-                    {
-                        _cells[row, col].Value = "Error";
-                    }
-                }
+                string userValue = ReadCellInput();
+                _cells[row, col].Value = userValue;
 
-                cursorX += 12;
+                EvaluateCellFormula(row, col);
+
+                cursorX += CellDisplayWidth;
             }
-            cursorY += 1;
+
+            cursorY++;
             cursorX = 0;
         }
     }
 
-    private string ReadCellInput()
+    private void EvaluateCellFormula(int row, int col)
+    {
+        ICell cell = _cells[row, col];
+
+        if (cell.Type == CellType.Formula)
+        {
+            try
+            {
+                string formula = cell.Formula;
+                double result = _formulaParser.ParseFormula(formula);
+                cell.Value = result.ToString(CultureInfo.InvariantCulture);
+            }
+            catch
+            {
+                cell.Value = ErrorValue;
+            }
+        }
+    }
+
+    private static string ReadCellInput()
     {
         string input = string.Empty;
         bool inputComplete = false;
 
         while (!inputComplete)
         {
-            ConsoleKeyInfo key = Console.ReadKey(intercept: true);
+            ConsoleKeyInfo keyInfo = Console.ReadKey(intercept: true);
 
-            if (key.Key == ConsoleKey.Tab || key.Key == ConsoleKey.Enter)
+            if (keyInfo.Key is ConsoleKey.Tab or ConsoleKey.Enter)
             {
                 inputComplete = true;
             }
             else
             {
-                input += key.KeyChar;
-                Console.Write(key.KeyChar);
+                if (input.Length < CellDisplayWidth - 1)
+                {
+                    input += keyInfo.KeyChar;
+                    Console.Write(keyInfo.KeyChar);
+                }
+                else
+                {
+                    Console.Beep();
+                }
             }
         }
 
@@ -92,28 +126,34 @@ public class TableInputHandler
 
     public void DisplayTable()
     {
-        Console.WriteLine("\nTable Output:");
+        Console.WriteLine();
+        Console.WriteLine(TableOutputHeading);
+
         for (int row = 0; row < _rows; row++)
         {
             for (int col = 0; col < _columns; col++)
             {
-                Console.Write(_cells[row, col].Value.PadRight(12));
+                string cellValue = _cells[row, col].Value;
+                Console.Write(cellValue.PadRight(CellDisplayWidth));
             }
             Console.WriteLine();
         }
+
         DisplayCellDetails();
     }
-    
-    //  Testing Method ( Unnecessary )
+
     public void DisplayCellDetails()
     {
-        Console.WriteLine("\nCell Details:");
+        Console.WriteLine();
+        Console.WriteLine(CellDetailsHeading);
+
         for (int row = 0; row < _rows; row++)
         {
             for (int col = 0; col < _columns; col++)
             {
                 ICell cell = _cells[row, col];
-                Console.WriteLine($"Address: {cell.Coordinates}, Value: {cell.Value}, Type: {cell.Type}");
+                Console.WriteLine(
+                    $"Address: {cell.Coordinates}, Value: {cell.Value}, Type: {cell.Type}");
             }
         }
     }

@@ -8,10 +8,3 @@ public interface ICell
     string Formula { get; set; }
     void Evaluate(); 
 }
-
-public enum CellType
-{
-    Value,   
-    Formula, 
-    Error    
-}
