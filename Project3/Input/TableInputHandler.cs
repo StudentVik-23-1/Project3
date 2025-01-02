@@ -42,7 +42,7 @@ public sealed class TableInputHandler
         {
             for (int col = 0; col < _columns; col++)
             {
-                string coordinates = CellAddresser.GetCellAddress(row, col);
+                string coordinates = CellAddressHelper.GenerateCellAddress(row, col);
                 _cells[row, col] = new Cell(coordinates);
             }
         }
@@ -109,15 +109,8 @@ public sealed class TableInputHandler
             }
             else
             {
-                if (input.Length < CellDisplayWidth - 1)
-                {
-                    input += keyInfo.KeyChar;
-                    Console.Write(keyInfo.KeyChar);
-                }
-                else
-                {
-                    Console.Beep();
-                }
+                input += keyInfo.KeyChar;
+                Console.Write(keyInfo.KeyChar);
             }
         }
 

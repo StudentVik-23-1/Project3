@@ -24,7 +24,7 @@ public sealed class Cell(string coordinates) : ICell
 
     public CellType Type { get; private set; } = CellType.Value;
 
-    public string Formula { get; set; }     // TODO look into making { get; private set; }
+    public string Formula { get; set; } 
 
     public void Evaluate()
     {
