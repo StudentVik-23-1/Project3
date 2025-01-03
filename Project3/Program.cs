@@ -1,6 +1,7 @@
-﻿using System;
-using Project3.Input;
+﻿using Project3.Input;
 using Project3.Validators;
+
+namespace Project3;
 
 class Program
 {

@@ -5,8 +5,8 @@ namespace Project3.Cells;
 
 public sealed class Cell(string coordinates) : ICell
 {
-    private const string FORMULA_PREFIX = "=";
-    private const int FORMULA_PREFIX_LENGTH = 1;
+    private const string FormulaPrefix = "=";
+    private const int FormulaPrefixLength = 1;
 
     private string _value;
 
@@ -37,10 +37,10 @@ public sealed class Cell(string coordinates) : ICell
 
     private void UpdateCellType()
     {
-        if (!string.IsNullOrEmpty(_value) && _value.StartsWith(FORMULA_PREFIX))
+        if (!string.IsNullOrEmpty(_value) && _value.StartsWith(FormulaPrefix))
         {
             Type = CellType.Formula;
-            Formula = _value[FORMULA_PREFIX_LENGTH..];
+            Formula = _value[FormulaPrefixLength..];
         }
         else
         {

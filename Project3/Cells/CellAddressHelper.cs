@@ -2,13 +2,13 @@ namespace Project3.Cells;
 
 public class CellAddressHelper
 {
-    private const char BASE_COLUMN_LETTER = 'A';
-    private const int ROW_OFFSET = 1;
+    private const char BaseColumnLetter = 'A';
+    private const int RowOffset = 1;
 
     public static string GenerateCellAddress(int row, int col)
     {
-        char colLetter = (char)(BASE_COLUMN_LETTER + col);
-        int rowNumber = row + ROW_OFFSET;
+        char colLetter = (char)(BaseColumnLetter + col);
+        int rowNumber = row + RowOffset;
         return $"{colLetter}{rowNumber}";
     }
 }

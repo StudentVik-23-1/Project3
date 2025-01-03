@@ -135,7 +135,7 @@ public sealed class TableInputHandler
         DisplayCellDetails();
     }
 
-    public void DisplayCellDetails()
+    private void DisplayCellDetails()
     {
         Console.WriteLine();
         Console.WriteLine(CellDetailsHeading);
