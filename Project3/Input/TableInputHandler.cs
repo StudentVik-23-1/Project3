@@ -64,6 +64,8 @@ public sealed class TableInputHandler
                 Console.SetCursorPosition(cursorX, cursorY);
                 string userValue = ReadCellInput();
                 _cells[row, col].Value = userValue;
+                
+                _cells[row, col].CaptureInitialType();
 
                 EvaluateCellFormula(row, col);
 
@@ -131,7 +133,7 @@ public sealed class TableInputHandler
             }
             Console.WriteLine();
         }
-
+        
         DisplayCellDetails();
     }
 
@@ -145,9 +147,26 @@ public sealed class TableInputHandler
             for (int col = 0; col < _columns; col++)
             {
                 ICell cell = _cells[row, col];
+                AdjustCellType(cell);
+
                 Console.WriteLine(
                     $"Address: {cell.Coordinates}, Value: {cell.Value}, Type: {cell.Type}");
             }
         }
     }
+    
+    private void AdjustCellType(ICell cell)
+    {
+        if (cell.InitialType == CellType.Formula && cell.Type == CellType.Number)
+        {
+            cell.Type = CellType.Formula; 
+        }
+        else if (cell.InitialType == CellType.Formula && cell.Type == CellType.String && cell.Value == "Error")
+        {
+            cell.Type = CellType.Error;
+        }
+    }
+
 }
+
+

@@ -22,29 +22,59 @@ public sealed class Cell(string coordinates) : ICell
         }
     }
 
-    public CellType Type { get; private set; } = CellType.Value;
+    public CellType Type { get; set; } = CellType.String;
+    
+    public CellType InitialType { get; private set; } 
 
     public string Formula { get; set; } 
 
     public void Evaluate()
     {
-        if (MathExpressionEvaluator.TryEvaluate(Value, out double result))
+        if (Type == CellType.Formula && !string.IsNullOrEmpty(Formula))
         {
-            Value = result.ToString(CultureInfo.InvariantCulture);
-            Type = CellType.Value;
+            try
+            {
+                if (MathExpressionEvaluator.TryEvaluate(Formula, out double result))
+                {
+                    Value = result.ToString(CultureInfo.InvariantCulture);
+                }
+            }
+            catch
+            {
+                Value = "Error";
+                Type = CellType.Error;
+            }
         }
+    }
+    
+    public void CaptureInitialType()
+    {
+        InitialType = Type;
     }
 
     private void UpdateCellType()
     {
-        if (!string.IsNullOrEmpty(_value) && _value.StartsWith(FormulaPrefix))
+        if (!string.IsNullOrEmpty(_value))
         {
-            Type = CellType.Formula;
-            Formula = _value[FormulaPrefixLength..];
+            if (_value.StartsWith(FormulaPrefix))
+            {
+                Type = CellType.Formula;
+                Formula = _value.Substring(FormulaPrefixLength);
+            }
+            else if (double.TryParse(_value, out _))
+            {
+                Type = CellType.Number;
+                Formula = null;
+            }
+            else
+            {
+                Type = CellType.String;
+                Formula = null;
+            }
         }
         else
         {
-            Type = CellType.Value;
+            Type = CellType.Error;
             Formula = null;
         }
     }

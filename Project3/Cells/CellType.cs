@@ -2,7 +2,8 @@ namespace Project3.Cells;
 
 public enum CellType
 {
-    Value,   
+    Number,
+    String,   
     Formula, 
     Error   
 }
