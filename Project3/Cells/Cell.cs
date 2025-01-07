@@ -51,6 +51,11 @@ public sealed class Cell(string coordinates) : ICell
     {
         InitialType = Type;
     }
+    
+    /*
+     *  CaptureInitialType() is there for the DisplayCellDetails()
+     *  can be removed if needed
+     */
 
     private void UpdateCellType()
     {

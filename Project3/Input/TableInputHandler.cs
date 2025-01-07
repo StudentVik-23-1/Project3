@@ -137,6 +137,12 @@ public sealed class TableInputHandler
         DisplayCellDetails();
     }
 
+    /*
+     *  DisplayCellDetails()
+     *  Originally created as testing method
+     *  Now functions well, but can be removed if needed
+     */
+    
     private void DisplayCellDetails()
     {
         Console.WriteLine();
@@ -155,6 +161,11 @@ public sealed class TableInputHandler
         }
     }
     
+    /*
+     *  Part of the DisplayCellDetails() method
+     *  Can be removed if needed
+     */
+    
     private void AdjustCellType(ICell cell)
     {
         if (cell.InitialType == CellType.Formula && cell.Type == CellType.Number)
@@ -166,7 +177,6 @@ public sealed class TableInputHandler
             cell.Type = CellType.Error;
         }
     }
-
 }
 
 
